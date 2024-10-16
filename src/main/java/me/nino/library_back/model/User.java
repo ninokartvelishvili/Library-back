@@ -1,10 +1,16 @@
 package me.nino.library_back.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "library_user")
 public class User {
@@ -13,23 +19,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false,unique=true)
     private String username;
-
-    @Column(nullable=false)
     private String password;
+    private String role;  // e.g., ADMIN, MEMBER
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
-
-    @ManyToMany
-    @JoinTable(
-        name = "user_loans",
-        joinColumns = @JoinColumn(name="user_id"),
-        inverseJoinColumns = @JoinColumn(name="book_id")
-    )
-    private List<Book> borrowedBooks;
-
+    @OneToMany(mappedBy = "user")
+    private List<Loan> loans;
 
 
 }
