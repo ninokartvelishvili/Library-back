@@ -1,5 +1,6 @@
 package me.nino.library_back.service;
 
+import me.nino.library_back.model.Book;
 import me.nino.library_back.model.User;
 import me.nino.library_back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,5 +15,8 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    public User addUser(User user){
+        return userRepository.save(user);
     }
 }

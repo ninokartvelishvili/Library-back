@@ -1,5 +1,7 @@
 package me.nino.library_back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +26,7 @@ public class User {
     private String role;  // e.g., ADMIN, MEMBER
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Loan> loans;
 
 

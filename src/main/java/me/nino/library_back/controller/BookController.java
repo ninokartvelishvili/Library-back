@@ -1,5 +1,6 @@
 package me.nino.library_back.controller;
 
+import me.nino.library_back.dto.BookResponseDTO;
 import me.nino.library_back.model.Book;
 import me.nino.library_back.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
+        List<BookResponseDTO> books = bookService.getAllBooks();
+        return ResponseEntity.ok(books);
     }
 
     @GetMapping("/search")
