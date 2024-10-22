@@ -1,13 +1,16 @@
 package me.nino.library_back.service;
 
 import me.nino.library_back.dto.BookResponseDTO;
+import me.nino.library_back.dto.LoanResponseDTO;
 import me.nino.library_back.model.Book;
+import me.nino.library_back.model.Loan;
 import me.nino.library_back.repository.BookRepository;
 import me.nino.library_back.repository.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +29,6 @@ public class BookService {
     private BookResponseDTO mapToBookResponseDTO(Book book) {
         // Check if the book is borrowed
         boolean isBorrowed = loanRepository.existsByBookIdAndReturnDateIsNull(book.getId());
-
         return new BookResponseDTO(
                 book.getId(),
                 book.getTitle(),

@@ -17,10 +17,14 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
-        List<BookResponseDTO> books = bookService.getAllBooks();
-        return ResponseEntity.ok(books);
+    public List<BookResponseDTO> getAllBooks() {
+        return bookService.getAllBooks();
     }
+//    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
+//        List<BookResponseDTO> books = bookService.getAllBooks();
+//        return ResponseEntity.ok(books);
+//    }
+
 
     @GetMapping("/search")
     public List<Book> searchBooks(@RequestParam String title) {

@@ -1,5 +1,6 @@
 package me.nino.library_back.controller;
 
+import me.nino.library_back.dto.UserResponseDTO;
 import me.nino.library_back.model.Book;
 import me.nino.library_back.model.User;
 import me.nino.library_back.service.UserService;
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
     @PostMapping

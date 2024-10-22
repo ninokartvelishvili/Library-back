@@ -13,4 +13,5 @@ public class BookResponseDTO {
     private String author;
     private String genre;
     private boolean isBorrowed;
+//  private String borrowedBy;
 }

@@ -24,8 +24,9 @@ public class LoanService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Loan> getLoansByUser(Long userId) {
-        return loanRepository.findByUserId(userId);
+    public List<LoanResponseDTO> getLoansByUser(Long userId) {
+        List<Loan> loans = loanRepository.findByUserId(userId);
+        return loans.stream().map(this::mapToLoanResponseDTO).collect(Collectors.toList());
     }
     public List<LoanResponseDTO> getAllLoans() {
         List<Loan> loans = loanRepository.findAll();
@@ -38,22 +39,22 @@ public class LoanService {
                 loan.getId(),
                 loan.getUser().getId(),
                 loan.getBook().getId(),
+                loan.getBook().getTitle(),
                 loan.getLoanDate(),
                 loan.getReturnDate()
         );
     }
-    public LoanResponseDTO createLoan(Long userId, Long bookId, LocalDate loanDate) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+
+    public LoanResponseDTO createLoan(User user,Book book, LocalDate loanDate) {
 
         Loan newLoan = new Loan();
         newLoan.setUser(user);
         newLoan.setBook(book);
         newLoan.setLoanDate(loanDate);
-        newLoan.setReturnDate(null);  // Assuming the loan starts without a return date
+        newLoan.setReturnDate(null);
 
         Loan savedLoan = loanRepository.save(newLoan);
 
-        return mapToLoanResponseDTO(savedLoan); // Return the DTO instead of the entity
+        return mapToLoanResponseDTO(savedLoan);
     }
 }
