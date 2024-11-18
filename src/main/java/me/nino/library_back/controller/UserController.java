@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -57,4 +58,20 @@ public class UserController {
         userService.deleteUserById(id);
         return ResponseEntity.ok("User deleted successfully.");
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        // Check if the user exists
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + id + " does not exist.");
+        }
+
+        // Delegate update logic to the service
+        userService.updateUser(optionalUser.get(), updatedUser);
+
+        return ResponseEntity.ok("User updated successfully.");
+    }
+
 }

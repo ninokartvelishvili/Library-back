@@ -54,10 +54,16 @@ public class BookService {
     }
 
     public void updateBook(Book existingBook, Book updatedBook) {
-        // Update fields
-        existingBook.setTitle(updatedBook.getTitle());
-        existingBook.setAuthor(updatedBook.getAuthor());
-        existingBook.setGenre(updatedBook.getGenre());
+        // Update only the fields that are not null
+        if (updatedBook.getTitle() != null) {
+            existingBook.setTitle(updatedBook.getTitle());
+        }
+        if (updatedBook.getAuthor() != null) {
+            existingBook.setAuthor(updatedBook.getAuthor());
+        }
+        if (updatedBook.getGenre() != null) {
+            existingBook.setGenre(updatedBook.getGenre());
+        }
 
         // Save changes
         bookRepository.save(existingBook);

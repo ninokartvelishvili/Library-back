@@ -52,4 +52,20 @@ public class UserService {
         // Perform deletion
         userRepository.deleteById(id);
     }
+
+    public void updateUser(User existingUser, User updatedUser) {
+        if (updatedUser.getUsername() != null) {
+            existingUser.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getRole() != null) {
+            existingUser.setRole(updatedUser.getRole());
+        }
+        if (updatedUser.getPassword() != null) {
+            existingUser.setPassword(updatedUser.getPassword());
+        }
+
+        // Save changes
+        userRepository.save(existingUser);
+    }
+
 }

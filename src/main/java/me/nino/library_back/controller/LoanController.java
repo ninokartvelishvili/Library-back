@@ -88,9 +88,7 @@ public class LoanController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateLoan(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> loanRequest) {
+    public ResponseEntity<?> updateLoan(@PathVariable Long id, @RequestBody Map<String, Object> loanRequest) {
         // Validate loan exists
         Loan loan = loanRepository.findById(id).orElse(null);
         if (loan == null) {
