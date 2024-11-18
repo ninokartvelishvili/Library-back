@@ -37,12 +37,29 @@ public class BookService {
                 isBorrowed
         );
     }
-    public List<Book> searchBooksByTitle(String title) {
-        return bookRepository.findByTitleContaining(title);
+    public List<BookResponseDTO> searchBooksByTitle(String title) {
+        List<Book> books = bookRepository.findByTitleContaining(title);
+
+        return books.stream()
+                .map(this::mapToBookResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public Book addBook(Book book){
         return bookRepository.save(book);
     }
+    public void deleteBookById(Long id) {
+        // Perform deletion
+        bookRepository.deleteById(id);
+    }
 
+    public void updateBook(Book existingBook, Book updatedBook) {
+        // Update fields
+        existingBook.setTitle(updatedBook.getTitle());
+        existingBook.setAuthor(updatedBook.getAuthor());
+        existingBook.setGenre(updatedBook.getGenre());
+
+        // Save changes
+        bookRepository.save(existingBook);
+    }
 }

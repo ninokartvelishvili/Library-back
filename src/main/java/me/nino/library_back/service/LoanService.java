@@ -28,6 +28,11 @@ public class LoanService {
         List<Loan> loans = loanRepository.findByUserId(userId);
         return loans.stream().map(this::mapToLoanResponseDTO).collect(Collectors.toList());
     }
+
+    public void deleteLoanById(Long id) {
+        // Perform deletion
+        loanRepository.deleteById(id);
+    }
     public List<LoanResponseDTO> getAllLoans() {
         List<Loan> loans = loanRepository.findAll();
         return loans.stream()
