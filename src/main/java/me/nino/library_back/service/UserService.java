@@ -1,5 +1,6 @@
 package me.nino.library_back.service;
 
+import jakarta.transaction.Transactional;
 import me.nino.library_back.dto.LoanResponseDTO;
 import me.nino.library_back.dto.LoanSummaryDTO;
 import me.nino.library_back.dto.UserResponseDTO;
@@ -28,6 +29,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+
     public UserResponseDTO mapToUserResponseDTO(User user){
         List<LoanSummaryDTO> LoanSummaryDTO = user.getLoans().stream()
                 .map(loan -> new LoanSummaryDTO(
@@ -39,7 +41,8 @@ public class UserService {
         return new UserResponseDTO(
                 user.getId(),
                 user.getUsername(),
-                user.getRole(),
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
                 LoanSummaryDTO
         );
     }
@@ -56,9 +59,6 @@ public class UserService {
     public void updateUser(User existingUser, User updatedUser) {
         if (updatedUser.getUsername() != null) {
             existingUser.setUsername(updatedUser.getUsername());
-        }
-        if (updatedUser.getRole() != null) {
-            existingUser.setRole(updatedUser.getRole());
         }
         if (updatedUser.getPassword() != null) {
             existingUser.setPassword(updatedUser.getPassword());

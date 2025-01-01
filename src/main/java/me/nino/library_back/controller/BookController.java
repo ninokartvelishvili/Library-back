@@ -29,17 +29,11 @@ public class BookController {
     public List<BookResponseDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
-//    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
-//        List<BookResponseDTO> books = bookService.getAllBooks();
-//        return ResponseEntity.ok(books);
-//    }
-
 
     @GetMapping("/search")
     public List<BookResponseDTO> searchBooks(@RequestParam String title) {
         return bookService.searchBooksByTitle(title);
     }
-
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody Book book){
         Book createdBook = bookService.addBook(book);
@@ -47,8 +41,6 @@ public class BookController {
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
-
-        // Check if the book exists
         if (!bookRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with ID " + id + " does not exist.");
         }
@@ -56,11 +48,9 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Book with ID " + id + " cannot be deleted because it has associated loans.");
         }
-        // Check if the book is currently borrowed
         if (loanRepository.existsByBookIdAndReturnDateIsNull(id)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Book with ID " + id + " is currently borrowed and cannot be deleted.");
         }
-        // Call the service to delete the book
         bookService.deleteBookById(id);
         return ResponseEntity.ok("Book deleted successfully.");
     }
@@ -73,10 +63,7 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Book with ID " + id + " does not exist.");
         }
-
-        // Delegate update logic to the service
         bookService.updateBook(optionalBook.get(), updatedBook);
-
         return ResponseEntity.ok("Book updated successfully.");
     }
 

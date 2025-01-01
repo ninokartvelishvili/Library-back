@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,9 +45,6 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-
-        // Check if the user exists
-
         if (!userRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("USER with ID " + id + " does not exist.");
         }
@@ -53,25 +52,28 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("User with ID " + id + " cannot be deleted because it has associated loans.");
         }
-
-        // Call the service to delete the user
         userService.deleteUserById(id);
         return ResponseEntity.ok("User deleted successfully.");
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        // Check if the user exists
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User with ID " + id + " does not exist.");
         }
-
-        // Delegate update logic to the service
         userService.updateUser(optionalUser.get(), updatedUser);
-
         return ResponseEntity.ok("User updated successfully.");
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        UserResponseDTO responseDTO = userService.mapToUserResponseDTO(currentUser);
+
+        return ResponseEntity.ok(responseDTO);
     }
 
 }
