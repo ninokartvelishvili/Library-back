@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +30,8 @@ public class BookController {
         this.loanRepository = loanRepository;
     }
     @GetMapping
-    public List<BookResponseDTO> getAllBooks() {
-        return bookService.getAllBooks();
+    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+        return bookService.getAllBooks(pageable);
     }
 
     @GetMapping("/search")

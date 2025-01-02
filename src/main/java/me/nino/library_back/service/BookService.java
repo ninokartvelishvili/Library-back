@@ -7,6 +7,8 @@ import me.nino.library_back.model.Loan;
 import me.nino.library_back.repository.BookRepository;
 import me.nino.library_back.repository.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +22,17 @@ public class BookService {
 
     @Autowired
     private LoanRepository loanRepository;
-    public List<BookResponseDTO> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(this::mapToBookResponseDTO)
-                .collect(Collectors.toList());
+
+//    public List<BookResponseDTO> getAllBooks() {
+//        List<Book> books = bookRepository.findAll();
+//        return books.stream()
+//                .map(this::mapToBookResponseDTO)
+//                .collect(Collectors.toList());
+//    }
+
+    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+        Page<Book> booksPage = bookRepository.findAll(pageable);
+        return booksPage.map(this::mapToBookResponseDTO);
     }
     private BookResponseDTO mapToBookResponseDTO(Book book) {
         // Check if the book is borrowed
